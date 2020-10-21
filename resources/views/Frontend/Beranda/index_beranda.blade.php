@@ -759,6 +759,8 @@ a.fill-div {
 
                 $('#username').html(obj.data[0].nama.concat(' | Logout'));
                 $('#myLoginModal').modal('hide');
+
+                $(location).attr('href', '{{ URL::to('/') }}/searchFilter')
               }
           }   
 
