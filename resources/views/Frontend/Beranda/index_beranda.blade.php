@@ -373,7 +373,93 @@ a.fill-div {
 </style>
 @stop
 
+<!-- Modal -->
+<div id="myLoginModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Login</h4>
+      </div>
+      <form method="post" action="{{ URL::to('/') }}/register_tamu">
+      {{ csrf_field() }}
+      <div class="modal-body">
+        <p>Mohon masukan informasi berikut</p>
+        <p>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" name="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">password</label>
+          <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="login()">Login</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Formulir Pendaftaran</h4>
+      </div>
+      <form method="post" action="{{ URL::to('/') }}/register_tamu">
+      {{ csrf_field() }}
+      <div class="modal-body">
+        <p>Mohon masukan informasi berikut</p>
+        <p>
+        <div class="form-group">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" class="form-control" name="nama" id="nama" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" name="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="kontak_tlp">No. Handphone</label>
+          <input type="text" class="form-control" name="kontak_tlp" id="kontak_tlp" required>
+        </div>
+        <div class="form-group">
+          <label for="alamat">Alamat</label>
+          <input type="text" class="form-control" name="alamat" id="alamat"  required>
+        </div>
+        <div class="form-group">
+          <label for="password">password</label>
+          <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+        <!-- <div class="form-group">
+          <label for="foto_id_card">Foto ID Card</label>
+          <input type="file" class="form-control" name="foto_id_card" id="foto_id_card">
+        </div>
+        <div class="form-group">
+          <label for="foto_ktp">Foto KTP</label>
+          <input type="file" class="form-control" name="foto_ktp" id="foto_ktp">
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="updatedata()">Simpan</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
 
 @section('slider')
 {{-- <div class="main-slider main-slider-2">
@@ -480,6 +566,7 @@ a.fill-div {
 </section>
 
 {{-- END FILTER --}}
+
 
 {{-- MEREK --}}
 
@@ -647,6 +734,66 @@ a.fill-div {
   }
 </script>
 <script>
+  $('#myLoginModal').on('hidden.bs.modal', function () {
+      $(this).find('form').trigger('reset');
+  })
+  $('#myModal').on('hidden.bs.modal', function () {
+      $(this).find('form').trigger('reset');
+  })
+  function login(){            
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      
+      var url = "{{ URL::to('/') }}/api/customer_login";   
+
+     $.ajax({
+          type:"POST",
+          data:{email:email,password:password},
+          url:url,
+          success:function(data){ 
+              if(data){
+                var obj=data;
+                var msg='Login Berhasil, Nama User: ';
+
+                alert(msg.concat(obj.data[0].nama));
+
+                $('#username').html(obj.data[0].nama.concat(' | Logout'));
+                $('#myLoginModal').modal('hide');
+              }
+          }   
+
+      }); 
+  }  
+
+  function updatedata(){            
+      var nama = document.getElementById('nama').value;
+      var email = document.getElementById('email').value;
+      var kontak_tlp = document.getElementById('kontak_tlp').value;
+      var alamat = document.getElementById('alamat').value;
+      var password = document.getElementById('password').value;
+      // var foto_id_card = document.getElementById('foto_id_card').value;
+      // var foto_ktp = document.getElementById('foto_ktp').value;
+      
+      var url = "{{ URL::to('/') }}/api/customer_register";   
+
+     $.ajax({
+          type:"POST",
+          enctype: 'multipart/form-data',
+          data:{nama:nama,email:email,kontak_tlp:kontak_tlp,alamat:alamat,password:password},
+          url:url,
+          success:function(data){ 
+              if(data){
+                var obj=data;
+                var msg='Berhasil, ID Data: ';
+
+                alert(msg.concat(obj.data.id));
+
+                $('#myModal').modal('hide');
+              }
+          }   
+
+      }); 
+  }  
   function imgError(image) {
     image.onerror = "";
     image.src = "{{ url('') }}" + "/assets/assets/img/car-dummy.jpg";

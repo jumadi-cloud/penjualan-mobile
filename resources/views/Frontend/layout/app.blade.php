@@ -416,9 +416,9 @@
                             <div class="header-topbarbox-2">
 
                                 <ul>
-
-                                    <li><a href="#">| Login | Register</a></li> |
-
+                                    <?php if (isset($_SESSION['nama'])){ echo $_SESSION['nama'];} else {?>
+                                    <li><div id="username">| <a href="#" data-toggle="modal" data-target="#myLoginModal">Login</a> | <a href="#"  data-toggle="modal" data-target="#myModal">register</a></div></li> 
+                                    <?php }?>
                                 </ul>
 
                             </div>
