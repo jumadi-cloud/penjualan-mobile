@@ -428,7 +428,7 @@ a.fill-div {
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" class="form-control" name="email" id="email" required>
+          <input type="email" class="form-control" name="email" id="temail" required>
         </div>
         <div class="form-group">
           <label for="kontak_tlp">No. Handphone</label>
@@ -755,12 +755,16 @@ a.fill-div {
                 var obj=data;
                 var msg='Login Berhasil, Nama User: ';
 
-                alert(msg.concat(obj.data[0].nama));
+                if (obj.success){
+                  alert(msg.concat(obj.data[0].nama));
 
-                $('#username').html(obj.data[0].nama.concat(' | Logout'));
-                $('#myLoginModal').modal('hide');
+                  $('#username').html(obj.data[0].nama.concat(' | Logout'));
+                  $('#myLoginModal').modal('hide');
 
-                $(location).attr('href', '{{ URL::to('/') }}/searchFilter')
+                  $(location).attr('href', '{{ URL::to('/') }}/searchFilter')
+                } else {
+                  alert(obj.msg);
+                }
               }
           }   
 
@@ -769,7 +773,7 @@ a.fill-div {
 
   function updatedata(){            
       var nama = document.getElementById('nama').value;
-      var email = document.getElementById('email').value;
+      var email = document.getElementById('temail').value;
       var kontak_tlp = document.getElementById('kontak_tlp').value;
       var alamat = document.getElementById('alamat').value;
       var password = document.getElementById('password').value;
@@ -777,6 +781,8 @@ a.fill-div {
       // var foto_ktp = document.getElementById('foto_ktp').value;
       
       var url = "{{ URL::to('/') }}/api/customer_register";   
+
+      alert(email);
 
      $.ajax({
           type:"POST",
@@ -786,11 +792,15 @@ a.fill-div {
           success:function(data){ 
               if(data){
                 var obj=data;
-                var msg='Berhasil, ID Data: ';
+                if (obj.success){
+                  var msg='Berhasil, ID Data: ';
 
-                alert(msg.concat(obj.data.id));
+                  alert(msg.concat(obj.data.id));
 
-                $('#myModal').modal('hide');
+                  $('#myModal').modal('hide');
+                } else {
+                  alert(obj.msg);
+                }
               }
           }   
 
